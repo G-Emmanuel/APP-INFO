@@ -109,13 +109,6 @@
       "url": "https://www.01net.com/actualites/feed/"
     },
     {
-      "id": "frandroid",
-      "name": "Frandroid",
-      "lang": "FR",
-      "cat": "auto",
-      "url": "https://www.frandroid.com/feed"
-    },
-    {
       "id": "korben",
       "name": "Korben",
       "lang": "FR",
@@ -149,6 +142,90 @@
       "lang": "EN",
       "cat": "auto",
       "url": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "silicon",
+      "name": "Silicon.fr",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.silicon.fr/feed"
+    },
+    {
+      "id": "zdnetfr",
+      "name": "ZDNet.fr",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.zdnet.fr/feeds/rss/actualites/"
+    },
+    {
+      "id": "packetpushers",
+      "name": "Packet Pushers",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://packetpushers.net/feed/"
+    },
+    {
+      "id": "ipspace",
+      "name": "ipSpace.net",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://blog.ipspace.net/atom.xml"
+    },
+    {
+      "id": "apnic",
+      "name": "APNIC Blog",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://blog.apnic.net/feed/"
+    },
+    {
+      "id": "cisco",
+      "name": "Cisco Blogs",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://blogs.cisco.com/feed"
+    },
+    {
+      "id": "lwn",
+      "name": "LWN.net",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://lwn.net/headlines/rss"
+    },
+    {
+      "id": "nixcraft",
+      "name": "nixCraft",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://www.cyberciti.biz/feed/"
+    },
+    {
+      "id": "redhat",
+      "name": "Red Hat Blog",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://www.redhat.com/en/rss/blog"
+    },
+    {
+      "id": "github",
+      "name": "GitHub Blog",
+      "lang": "EN",
+      "cat": "it",
+      "url": "https://github.blog/feed/"
+    },
+    {
+      "id": "thenewstack",
+      "name": "The New Stack",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://thenewstack.io/feed/"
+    },
+    {
+      "id": "infoq",
+      "name": "InfoQ",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://feed.infoq.com/"
     },
     {
       "id": "actuia",
@@ -217,7 +294,7 @@
       "id": "kubernetes",
       "name": "Kubernetes Blog",
       "lang": "EN",
-      "cat": "infra",
+      "cat": "it",
       "url": "https://kubernetes.io/feed.xml"
     },
     {

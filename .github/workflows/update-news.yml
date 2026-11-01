@@ -36,7 +36,13 @@ jobs:
       - name: Récupérer les actus déjà publiées (pour garder 7 jours d'historique)
         run: curl -sf "${{ steps.pages.outputs.base_url }}/data/news.json" -o docs/data/news.json || echo "Pas encore de données publiées"
 
-      - name: Collecter les flux
+      - name: Installer la bibliothèque Claude (résumés en français)
+        run: pip install --quiet anthropic
+
+      - name: Collecter les flux et écrire les résumés
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUMMARY_MODEL: ${{ vars.SUMMARY_MODEL }}
         run: python scripts/fetch_news.py
 
       - uses: actions/upload-pages-artifact@v3

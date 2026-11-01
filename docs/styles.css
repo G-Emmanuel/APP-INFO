@@ -236,6 +236,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; 
   margin: 0; color: var(--ink-2); font-size: 0.93rem; line-height: 1.45;
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
+.art-sum.fr { display: block; -webkit-line-clamp: unset; overflow: visible; }
 .art.read .art-title, .art.read .art-sum { color: var(--muted); }
 .art.read .art-title { font-weight: 600; }
 .art-thumb {

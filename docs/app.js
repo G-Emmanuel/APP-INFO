@@ -5,7 +5,7 @@
   // ------------------------------------------------------------------ réglages
   const CATS = {
     cyber:   { label: 'Cybersécurité',             short: 'Cyber',          quota: 4 },
-    it:      { label: 'IT, systèmes & réseau',     short: 'IT & Réseau',    quota: 2 },
+    it:      { label: 'Réseau, systèmes & DevOps', short: 'Réseau & DevOps', quota: 2 },
     ia:      { label: 'Intelligence artificielle', short: 'IA',             quota: 2 },
     infra:   { label: 'Cloud & data centers',      short: 'Cloud & Infra',  quota: 2 },
     gaming:  { label: 'Gaming',                    short: 'Gaming',         quota: 2 },
@@ -94,7 +94,7 @@
     state.sources = {};
     for (const s of data.sources || []) state.sources[s.id] = s;
     state.items = (data.items || []).map((it) => {
-      it._hay = norm(`${it.title} ${it.summary} ${sourceName(it.source)} ${(it.cves || []).join(' ')} ${it.ref || ''}`);
+      it._hay = norm(`${it.title} ${it.summary} ${it.summary_fr || ''} ${sourceName(it.source)} ${(it.cves || []).join(' ')} ${it.ref || ''}`);
       it._seen = Date.parse(it.first_seen || it.published) || it.ts * 1000;
       return it;
     });
@@ -211,7 +211,9 @@
           ${isNew ? '<span class="new">Nouveau</span>' : ''}
         </div>
         <h3 class="art-title"><a href="${esc(safeUrl(it.link))}" target="_blank" rel="noopener" data-open="${esc(it.id)}">${esc(it.title)}</a></h3>
-        ${it.summary ? `<p class="art-sum">${esc(it.summary)}</p>` : ''}
+        ${it.summary_fr
+          ? `<p class="art-sum fr"${it.lang !== 'FR' ? ' title="Résumé traduit en français"' : ''}>${esc(it.summary_fr)}</p>`
+          : it.summary ? `<p class="art-sum">${esc(it.summary)}</p>` : ''}
         <div class="art-foot">
           ${tagsHtml(it)}${alsoHtml}
           <div class="actions">
@@ -262,7 +264,7 @@
       if (picked.length) {
         sections.push({ cat, items: picked });
         total += picked.length;
-        for (const it of picked) words += (it.title + ' ' + it.summary).split(/\s+/).length;
+        for (const it of picked) words += (it.title + ' ' + (it.summary_fr || it.summary)).split(/\s+/).length;
       }
     }
 
@@ -515,7 +517,7 @@
     } else {
       const it = findItem(id);
       if (!it) return;
-      const keep = ['id', 'title', 'link', 'summary', 'image', 'source', 'lang', 'cat', 'published', 'ts', 'flags', 'cves', 'ref'];
+      const keep = ['id', 'title', 'link', 'summary', 'summary_fr', 'image', 'source', 'lang', 'cat', 'published', 'ts', 'flags', 'cves', 'ref'];
       const snap = {};
       for (const k of keep) snap[k] = it[k];
       snap.sourceName = sourceName(it.source);

@@ -1,5 +1,5 @@
 /* Service worker : rend l'application installable et lisible hors connexion. */
-const VERSION = 'dn-v1';
+const VERSION = 'dn-v2';
 const SHELL = [
   './',
   'index.html',

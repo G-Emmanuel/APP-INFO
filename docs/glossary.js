@@ -165,6 +165,34 @@ window.GLOSSARY = [
     url: "https://fr.wikipedia.org/wiki/Kubernetes"
   },
   {
+    term: "CI/CD",
+    match: ["\\bci/cd\\b", "integration continue", "continuous integration", "continuous delivery", "deploiement continu", "github actions", "gitlab ci", "jenkins"],
+    search: "CI/CD",
+    def: "La CI/CD automatise le chemin entre une modification de code et sa mise en production. L'intégration continue (CI) compile et teste chaque modification dès qu'elle est envoyée ; le déploiement continu (CD) la livre ensuite automatiquement sur les serveurs. Les erreurs sont repérées plus tôt et les mises en production deviennent routinières plutôt que risquées.",
+    url: "https://fr.wikipedia.org/wiki/Int%C3%A9gration_continue"
+  },
+  {
+    term: "Infrastructure as Code",
+    match: ["infrastructure as code", "\\biac\\b", "terraform", "opentofu", "ansible", "pulumi"],
+    search: "Terraform",
+    def: "L'Infrastructure as Code consiste à décrire serveurs, réseaux et services cloud dans des fichiers texte plutôt que de les configurer à la main. Des outils comme Terraform ou Ansible lisent ces fichiers et créent ou corrigent l'infrastructure pour qu'elle corresponde à la description. On peut alors versionner, relire et reproduire une infrastructure comme du code.",
+    url: "https://fr.wikipedia.org/wiki/Infrastructure_as_code"
+  },
+  {
+    term: "SD-WAN",
+    match: ["sd-?wan", "\\bsase\\b"],
+    search: "SD-WAN",
+    def: "Le SD-WAN pilote par logiciel les liaisons entre les sites d'une entreprise (fibre, 4G/5G, Internet, MPLS). Il choisit en temps réel le meilleur lien pour chaque application et se configure depuis une console centrale. Combiné à des services de sécurité dans le cloud, il forme ce qu'on appelle le SASE.",
+    url: "https://fr.wikipedia.org/wiki/SD-WAN"
+  },
+  {
+    term: "Observabilité",
+    match: ["observabilit", "opentelemetry", "prometheus", "grafana", "\\bapm\\b"],
+    search: "observab",
+    def: "L'observabilité est la capacité à comprendre ce qui se passe dans un système à partir des données qu'il produit : métriques, journaux et traces. Elle va plus loin que la supervision classique, qui vérifie seulement si un service répond. Des outils comme Prometheus, Grafana ou OpenTelemetry aident à trouver la cause d'une panne dans des architectures distribuées.",
+    url: "https://en.wikipedia.org/wiki/Observability_(software)"
+  },
+  {
     term: "PUE d'un data center",
     match: ["\\bpue\\b", "data ?cent(er|re)s?", "centres? de donnees"],
     search: "data center",

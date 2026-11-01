@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Récupère les flux RSS/Atom listés dans config/sources.json et écrit docs/data/news.json.
 
-Aucune dépendance : uniquement la bibliothèque standard de Python (3.10+).
+Aucune dépendance pour la collecte : uniquement la bibliothèque standard de Python (3.10+).
+Les résumés en français (scripts/summarize.py) demandent en plus le paquet `anthropic`
+et la variable d'environnement ANTHROPIC_API_KEY ; sans eux, cette étape est ignorée.
 Usage :  python scripts/fetch_news.py
 """
 from __future__ import annotations
@@ -42,27 +44,38 @@ KEYWORDS = {
         "data leak", "piratage", "piraté", "hacker", "cyberattaque", "cyberattack", "cyber-attaque", "backdoor",
         "porte dérobée", "botnet", "ddos", "infostealer", "stealer", "patch tuesday", "correctif de sécurité",
         "security update", "cybersécurité", "cybersecurity", "anssi", "cert-fr", "trojan", "cheval de troie",
-        "spyware", "logiciel espion", "arnaque", "scam", "apt", "edr", "siem", "sécurité informatique",
+        "spyware", "logiciel espion", "arnaque", "scam", "apt", "edr", "siem", "sécurité informatique", "backdoored",
+        "pam", "iam", "identités", "identity", "zero trust", "privilèges", "privilege",
         "authentification", "mot de passe", "password", "chiffrement", "encryption",
     ],
     "ia": [
         "intelligence artificielle", "artificial intelligence", "llm", "chatgpt", "openai", "anthropic", "claude",
         "gemini", "mistral ai", "copilot", "machine learning", "apprentissage automatique", "deep learning",
         "modèle de langage", "language model", "agent ia", "ai agent", "agentic", "agentique", "gpt-", "deepseek",
-        "llama", "hugging face", "génératif", "generative", "chatbot", "midjourney", "sora",
+        "llama", "hugging face", "génératif", "generative", "chatbot", "midjourney", "sora", "mistral", "qwen",
+        "cohere", "modèle d'ia", "ai model", "open-weight", "poids ouverts", "inférence", "inference",
     ],
     "infra": [
         "data center", "datacenter", "data centre", "centre de données", "centres de données", "cloud", "aws",
-        "azure", "google cloud", "kubernetes", "k8s", "docker", "conteneur", "container", "serveur", "server",
-        "stockage", "storage", "gpu", "nvidia", "hpc", "supercalculateur", "supercomputer", "hyperscal",
-        "refroidissement", "cooling", "virtualisation", "virtualization", "vmware", "proxmox", "terraform",
-        "devops", "sre", "ovhcloud", "scaleway", "mégawatt", "megawatt", "nucléaire", "électricité", "power grid",
+        "azure", "google cloud", "serveur", "server", "stockage", "storage", "gpu", "hpc", "supercalculateur",
+        "supercomputer", "hyperscal", "refroidissement", "cooling", "virtualisation", "virtualization", "vmware",
+        "proxmox", "hyper-v", "ovhcloud", "scaleway", "mégawatt", "megawatt", "nucléaire", "électricité",
+        "power grid", "secnumcloud", "cloud souverain", "sovereign cloud", "quantique", "quantum comput",
+        "quantum chip", "puce quantique", "semi-conducteur", "semiconductor",
     ],
+    # Réseau, administration système et DevOps (vocabulaire professionnel uniquement)
     "it": [
-        "windows", "linux", "microsoft", "réseau", "network", "wi-fi", "wifi", "5g", "fibre", "routeur", "router",
-        "cisco", "active directory", "powershell", "sysadmin", "mise à jour", "update", "navigateur", "browser",
-        "chrome", "firefox", "android", "ios", "apple", "smartphone", "processeur", "cpu", "intel", "amd",
-        "open source", "logiciel", "software", "ssd", "dns", "bgp", "ipv6", "vpn", "ubuntu", "debian", "red hat",
+        "réseau informatique", "réseaux informatiques", "ingénierie réseau", "administrateur réseau", "networking", "network engineer", "network automation", "routeur", "router", "routage", "routing", "commutateur", "network switch", "cisco", "juniper",
+        "arista", "fortinet", "palo alto", "mikrotik", "ubiquiti", "bgp", "ospf", "mpls", "sd-wan", "sdwan", "sase",
+        "vlan", "vxlan", "evpn", "dns", "dhcp", "ipv4", "ipv6", "tcp", "latence", "latency", "bande passante",
+        "bandwidth", "peering", "fibre", "wi-fi 7", "wifi 7", "load balanc", "répartiteur de charge", "pare-feu",
+        "firewall", "vpn", "reverse proxy", "sysadmin", "administration système", "administration réseau", "admin sys", "active directory", "entra id", "windows server",
+        "group policy", "gpo", "powershell", "linux", "kernel", "noyau", "ubuntu", "debian", "red hat",
+        "rhel", "systemd", "devops", "devsecops", "sre", "platform engineering", "ci/cd", "gitops",
+        "git ", "github", "gitlab", "jenkins", "ansible", "terraform", "opentofu", "puppet", "infrastructure as code",
+        "kubernetes", "k8s", "docker", "conteneur", "container", "helm chart", "observabilit", "observability",
+        "monitoring", "supervision", "prometheus", "grafana", "opentelemetry", "sauvegarde", "backup", "itsm",
+        "patch management", "open source", "postgresql", "mysql", "nginx", "apache", "database", "base de données",
     ],
     "gaming": [
         "jeu vidéo", "jeux vidéo", "video game", "videogame", "gaming", "playstation", "ps5", "xbox", "nintendo",
@@ -71,8 +84,35 @@ KEYWORDS = {
     ],
 }
 # Sigles à reconnaître en respectant la casse (« AI » mais pas « j'ai »).
-CASE_SENSITIVE = {"ia": [r"\bIA\b", r"\bAI\b"], "cyber": [r"\bCVE\b"]}
+CASE_SENSITIVE = {"ia": [r"\bIA\b", r"\bAI\b"], "cyber": [r"\bCVE\b"], "it": [r"\bLAN\b", r"\bWAN\b", r"\bSNMP\b", r"\bSSH\b"]}
 TIE_ORDER = ["cyber", "ia", "infra", "it", "gaming"]
+
+
+def _kw_pattern(word: str) -> re.Pattern:
+    # Le mot-clé doit commencer un mot (« aws » ne doit pas trouver « flaws »).
+    # Les mots courts (sigles) doivent aussi le finir, avec un éventuel pluriel (« gpu », « gpus »).
+    pat = r"(?<![a-z0-9])" + re.escape(word)
+    if len(word.strip()) <= 4:
+        pat += r"s?(?![a-z0-9])"
+    return re.compile(pat)
+
+
+KW_PATTERNS = {cat: [_kw_pattern(w) for w in words] for cat, words in KEYWORDS.items()}
+
+# Bons plans et promotions : jamais affichés, quelle que soit la source.
+DEALS_RE = re.compile(
+    r"black friday|cyber monday|prime day|french days|bon plan|bons plans|code promo|promo\b|promotion|soldes|"
+    r"\bréduction\b|prix (cassé|barré|en baisse|fou)|à moitié prix|moins cher|\bdeals?\b|price drop|lowest price|"
+    r"\bsave \$|\$\d+ off|\d+% off|% de remise|coupon|discount|sponsored|sponsorisé|webinar|webinaire|"
+    r"\bmarketing\b", re.I)
+# Produits grand public : écartés quand l'article n'est pas clairement technique (faille, IA…).
+CONSUMER_RE = re.compile(
+    r"smartphone|iphone|ipad|galaxy|pixel \d|pixel watch|xiaomi|oneplus|oppo|honor|huawei (p|mate)|montre connectée|"
+    r"smartwatch|apple watch|écouteurs|earbuds|airpods|casque (audio|bluetooth)|headphones|téléviseur|\btv\b|"
+    r"aspirateur|robot aspirateur|trottinette|vélo électrique|voiture électrique|forfait (mobile|5g)|\btest\b|"
+    r"\breview\b|comparatif|meilleurs?\b|best .{0,30}(to buy|of 20\d\d)|unboxing|prise en main|laptop|pc portable|"
+    r"ordinateur portable|mini pc|macbook|\bpc idéal|"
+    r"imprimante 3d|3d print|liseuse|kindle|tablette|appareil photo|camera review", re.I)
 
 FLAG_RULES = {
     "exploited": r"exploited in the wild|actively exploited|activement exploitée?s?|exploitée?s? activement|zero[- ]day|0-day|exploited",
@@ -290,17 +330,20 @@ def norm(s: str) -> str:
     return "".join(ch for ch in s if not unicodedata.combining(ch))
 
 
-def classify(title: str, summary: str, default: str) -> str:
+def classify(title: str, summary: str, default: str) -> str | None:
+    """Renvoie la rubrique de l'article, ou None s'il faut l'écarter."""
+    if DEALS_RE.search(title):
+        return None
     if default != "auto":
         return default
     hay_title, hay_sum = title.lower(), summary.lower()
     scores = {}
-    for cat, words in KEYWORDS.items():
+    for cat, patterns in KW_PATTERNS.items():
         s = 0.0
-        for w in words:
-            if w in hay_title:
+        for pat in patterns:
+            if pat.search(hay_title):
                 s += 2
-            elif w in hay_sum:
+            elif pat.search(hay_sum):
                 s += 1
         for pat in CASE_SENSITIVE.get(cat, []):
             if re.search(pat, title):
@@ -309,9 +352,12 @@ def classify(title: str, summary: str, default: str) -> str:
                 s += 1
         scores[cat] = s
     best = max(scores.values())
-    if best <= 0:
-        return "it"
-    return next(c for c in TIE_ORDER if scores[c] == best)
+    if best < 2:
+        return None  # rien de vraiment tech dans le titre : hors sujet pour l'appli
+    cat = next(c for c in TIE_ORDER if scores[c] == best)
+    if CONSUMER_RE.search(title) and (cat == "it" or best < 4):
+        return None  # actu grand public (téléphones, tests, comparatifs…)
+    return cat
 
 
 CVE_RE = re.compile(r"CVE-\d{4}-\d{4,7}", re.I)
@@ -433,8 +479,13 @@ def main() -> int:
                 if d < cutoff:
                     continue
                 item = enrich(e, src)
+                if not item["cat"]:
+                    continue
                 prev = previous.get(item["id"])
                 item["first_seen"] = prev["first_seen"] if prev else now.isoformat(timespec="seconds")
+                for k in ("summary_fr", "summary_fr_tries"):  # un article n'est résumé qu'une fois
+                    if prev and k in prev:
+                        item[k] = prev[k]
                 item["published"] = d.astimezone(timezone.utc).isoformat(timespec="seconds")
                 item["ts"] = int(d.timestamp())
                 if item["id"] not in fresh:
@@ -448,9 +499,14 @@ def main() -> int:
             log(f"{'OK ' if not error else 'ERR'} {src['name']:<30} {kept:>3} {error}")
 
     # Les articles déjà connus qui ont disparu du flux restent jusqu'à leurs 7 jours.
-    src_ids = {s["id"] for s in sources}
+    src_by_id = {s["id"]: s for s in sources}
     for pid, prev in previous.items():
-        if pid not in fresh and prev.get("source") in src_ids and prev.get("ts", 0) >= cutoff.timestamp():
+        if pid not in fresh and prev.get("source") in src_by_id and prev.get("ts", 0) >= cutoff.timestamp():
+            # On réapplique les règles de classement actuelles (elles ont pu changer depuis).
+            cat = classify(prev["title"], prev.get("summary", ""), src_by_id[prev["source"]]["cat"])
+            if not cat:
+                continue
+            prev["cat"] = cat
             for k in ("cluster", "coverage", "also"):
                 prev.pop(k, None)
             prev["importance"] = prev.get("base_importance", prev.get("importance", 0))
@@ -461,6 +517,13 @@ def main() -> int:
         it["base_importance"] = it.get("base_importance", it["importance"])
         it["importance"] = it["base_importance"]
     cluster(items)
+
+    # Résumés en français écrits par Claude (si une clé API est configurée).
+    try:
+        from summarize import summarize
+        summarize(items, download, {s["id"]: s["name"] for s in sources}, log)
+    except Exception as exc:  # les résumés ne doivent jamais bloquer la mise à jour des actus
+        log(f"Résumés FR : étape interrompue ({type(exc).__name__}: {exc})")
 
     payload = {
         "generated_at": now.isoformat(timespec="seconds"),
