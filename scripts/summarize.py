@@ -111,8 +111,8 @@ META_RE = re.compile(
 
 
 def _clean(text: str) -> str:
-    text = re.sub(r"^\s*(résumé|summary)\s*:\s*", "", text, flags=re.I)
     text = text.replace("**", "").replace("__", "")
+    text = re.sub(r"^\s*(résumé|summary)\s*:\s*", "", text, flags=re.I)
     text = re.sub(r"\s+", " ", text).strip()
     # Filet de sécurité : on retire les phrases qui commentent le document au lieu du sujet.
     sentences = re.split(r"(?<=[.!?])\s+", text)
