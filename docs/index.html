@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Daily News Tech & Infra</title>
+  <meta name="description" content="Toute l'actualité tech en un seul endroit : cybersécurité, IT et réseau, IA, cloud et data centers, gaming, culture générale.">
+  <meta name="theme-color" content="#f3f5f8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Daily News">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Applique le thème choisi avant l'affichage pour éviter un flash.
+    try { var th = localStorage.getItem('dn-theme'); if (th === 'light' || th === 'dark') document.documentElement.dataset.theme = th; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#briefing" aria-label="Daily News, retour au briefing">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-name">Daily News</span>
+          <span class="brand-sub">Tech &amp; Infra</span>
+        </span>
+      </a>
+
+      <nav class="tabs" aria-label="Sections">
+        <a href="#briefing" data-view="briefing">Briefing</a>
+        <a href="#fil" data-view="fil">Fil</a>
+        <a href="#alertes" data-view="alertes">Alertes</a>
+        <a href="#favoris" data-view="favoris">Favoris</a>
+      </nav>
+
+      <div class="top-actions">
+        <span class="status" id="status" role="status"><span class="dot" aria-hidden="true"></span><span id="statusText">Chargement…</span></span>
+        <button class="icon-btn" id="refreshBtn" type="button" aria-label="Actualiser">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+        </button>
+        <button class="icon-btn" id="settingsBtn" type="button" aria-label="Réglages">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="newbar" id="newbar" hidden>
+    <button type="button" id="newbarBtn">Nouveaux articles · Afficher</button>
+  </div>
+
+  <div class="layout">
+    <main id="main" class="main" tabindex="-1">
+      <section class="toolbar" id="toolbar" aria-label="Filtres">
+        <div class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          <input id="search" type="search" placeholder="Rechercher un sujet, une source, une CVE…" autocomplete="off" aria-label="Rechercher">
+        </div>
+        <div class="filters">
+          <div class="seg" role="group" aria-label="Période">
+            <button type="button" data-period="24">24 h</button>
+            <button type="button" data-period="48">48 h</button>
+            <button type="button" data-period="168">7 j</button>
+          </div>
+          <div class="seg" role="group" aria-label="Langue">
+            <button type="button" data-lang="all">Tout</button>
+            <button type="button" data-lang="FR">FR</button>
+            <button type="button" data-lang="EN">EN</button>
+          </div>
+          <div class="seg" role="group" aria-label="Tri" data-only="fil">
+            <button type="button" data-sort="date">Récents</button>
+            <button type="button" data-sort="score">Importants</button>
+          </div>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Rubriques"></div>
+      </section>
+
+      <div id="view" class="view" aria-live="polite"></div>
+    </main>
+
+    <aside class="side" id="side" aria-label="En complément"></aside>
+  </div>
+
+  <nav class="bottomnav" aria-label="Sections">
+    <a href="#briefing" data-view="briefing">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+      <span>Briefing</span>
+    </a>
+    <a href="#fil" data-view="fil">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h14"/></svg>
+      <span>Fil</span>
+    </a>
+    <a href="#alertes" data-view="alertes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>
+      <span>Alertes</span><b class="badge" id="alertBadge" hidden></b>
+    </a>
+    <a href="#favoris" data-view="favoris">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z"/></svg>
+      <span>Favoris</span>
+    </a>
+  </nav>
+
+  <dialog class="sheet" id="settings" aria-labelledby="settingsTitle">
+    <form method="dialog" class="sheet-inner">
+      <div class="sheet-head">
+        <h2 id="settingsTitle">Réglages</h2>
+        <button class="icon-btn" value="close" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+
+      <fieldset>
+        <legend>Thème</legend>
+        <div class="seg" id="themeSeg">
+          <button type="button" data-theme-choice="auto">Auto</button>
+          <button type="button" data-theme-choice="light">Clair</button>
+          <button type="button" data-theme-choice="dark">Sombre</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Installer sur ton téléphone</legend>
+        <p class="hint" id="installHint">Android (Chrome) : menu ⋮ puis « Ajouter à l'écran d'accueil ». iPhone (Safari) : bouton Partager puis « Sur l'écran d'accueil ».</p>
+        <button type="button" class="btn" id="installBtn" hidden>Installer l'application</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Sources affichées</legend>
+        <p class="hint">Décoche une source pour la masquer partout. L'état indique si son flux a répondu à la dernière mise à jour.</p>
+        <div id="sourceList" class="source-list"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Historique</legend>
+        <p class="hint" id="readCount"></p>
+        <button type="button" class="btn ghost" id="clearRead">Tout marquer comme non lu</button>
+      </fieldset>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="glossary.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

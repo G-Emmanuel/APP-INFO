@@ -1,0 +1,4 @@
+# Données générées par le robot (reconstruites à chaque mise à jour)
+docs/data/
+__pycache__/
+*.tmp

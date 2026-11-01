@@ -1,0 +1,308 @@
+{
+  "_comment": "Liste des sources du fil. cat = rubrique par défaut ; 'auto' = rubrique choisie selon le contenu de l'article. Ajoute ou retire une ligne puis relance scripts/fetch_news.py.",
+  "sources": [
+    {
+      "id": "certfr-alertes",
+      "name": "CERT-FR (alertes)",
+      "lang": "FR",
+      "cat": "cyber",
+      "alert": true,
+      "url": "https://www.cert.ssi.gouv.fr/alerte/feed/"
+    },
+    {
+      "id": "certfr-avis",
+      "name": "CERT-FR (avis)",
+      "lang": "FR",
+      "cat": "cyber",
+      "alert": true,
+      "url": "https://www.cert.ssi.gouv.fr/avis/feed/"
+    },
+    {
+      "id": "certfr-actu",
+      "name": "CERT-FR (actualités)",
+      "lang": "FR",
+      "cat": "cyber",
+      "url": "https://www.cert.ssi.gouv.fr/actualite/feed/"
+    },
+    {
+      "id": "cybermalveillance",
+      "name": "Cybermalveillance.gouv.fr",
+      "lang": "FR",
+      "cat": "cyber",
+      "url": "https://www.cybermalveillance.gouv.fr/feed/atom-flux-actualites"
+    },
+    {
+      "id": "zataz",
+      "name": "ZATAZ",
+      "lang": "FR",
+      "cat": "cyber",
+      "url": "https://www.zataz.com/feed/"
+    },
+    {
+      "id": "thehackernews",
+      "name": "The Hacker News",
+      "lang": "EN",
+      "cat": "cyber",
+      "url": "https://feeds.feedburner.com/TheHackersNews"
+    },
+    {
+      "id": "bleepingcomputer",
+      "name": "BleepingComputer",
+      "lang": "EN",
+      "cat": "cyber",
+      "url": "https://www.bleepingcomputer.com/feed/"
+    },
+    {
+      "id": "securityweek",
+      "name": "SecurityWeek",
+      "lang": "EN",
+      "cat": "cyber",
+      "url": "https://www.securityweek.com/feed/"
+    },
+    {
+      "id": "krebs",
+      "name": "Krebs on Security",
+      "lang": "EN",
+      "cat": "cyber",
+      "url": "https://krebsonsecurity.com/feed/"
+    },
+    {
+      "id": "darkreading",
+      "name": "Dark Reading",
+      "lang": "EN",
+      "cat": "cyber",
+      "url": "https://www.darkreading.com/rss.xml"
+    },
+    {
+      "id": "itconnect",
+      "name": "IT-Connect",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.it-connect.fr/feed/"
+    },
+    {
+      "id": "lemondeinformatique",
+      "name": "Le Monde Informatique",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.lemondeinformatique.fr/flux-rss/thematique/toutes-les-actualites/rss.xml"
+    },
+    {
+      "id": "lemagit",
+      "name": "LeMagIT",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.lemagit.fr/rss/ContentSyndication.xml"
+    },
+    {
+      "id": "next",
+      "name": "Next",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://next.ink/feed/"
+    },
+    {
+      "id": "01net",
+      "name": "01net",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.01net.com/actualites/feed/"
+    },
+    {
+      "id": "frandroid",
+      "name": "Frandroid",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://www.frandroid.com/feed"
+    },
+    {
+      "id": "korben",
+      "name": "Korben",
+      "lang": "FR",
+      "cat": "auto",
+      "url": "https://korben.info/feed"
+    },
+    {
+      "id": "linuxfr",
+      "name": "LinuxFr.org",
+      "lang": "FR",
+      "cat": "it",
+      "url": "https://linuxfr.org/news.atom"
+    },
+    {
+      "id": "networkworld",
+      "name": "Network World",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://www.networkworld.com/feed/"
+    },
+    {
+      "id": "theregister",
+      "name": "The Register",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://www.theregister.com/headlines.atom"
+    },
+    {
+      "id": "arstechnica",
+      "name": "Ars Technica",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://feeds.arstechnica.com/arstechnica/index"
+    },
+    {
+      "id": "actuia",
+      "name": "ActuIA",
+      "lang": "FR",
+      "cat": "ia",
+      "url": "https://www.actuia.com/feed/"
+    },
+    {
+      "id": "mittr-ai",
+      "name": "MIT Technology Review",
+      "lang": "EN",
+      "cat": "ia",
+      "url": "https://www.technologyreview.com/topic/artificial-intelligence/feed"
+    },
+    {
+      "id": "verge-ai",
+      "name": "The Verge (IA)",
+      "lang": "EN",
+      "cat": "ia",
+      "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+    },
+    {
+      "id": "techcrunch-ai",
+      "name": "TechCrunch (IA)",
+      "lang": "EN",
+      "cat": "ia",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/"
+    },
+    {
+      "id": "huggingface",
+      "name": "Hugging Face",
+      "lang": "EN",
+      "cat": "ia",
+      "url": "https://huggingface.co/blog/feed.xml"
+    },
+    {
+      "id": "dcd",
+      "name": "DatacenterDynamics",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://www.datacenterdynamics.com/en/rss/"
+    },
+    {
+      "id": "register-onprem",
+      "name": "The Register (on-prem)",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://www.theregister.com/on_prem/headlines.atom"
+    },
+    {
+      "id": "cloudflare",
+      "name": "Cloudflare Blog",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://blog.cloudflare.com/rss/"
+    },
+    {
+      "id": "aws",
+      "name": "AWS News Blog",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://aws.amazon.com/blogs/aws/feed/"
+    },
+    {
+      "id": "kubernetes",
+      "name": "Kubernetes Blog",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://kubernetes.io/feed.xml"
+    },
+    {
+      "id": "servethehome",
+      "name": "ServeTheHome",
+      "lang": "EN",
+      "cat": "infra",
+      "url": "https://www.servethehome.com/feed/"
+    },
+    {
+      "id": "vgc",
+      "name": "VGC",
+      "lang": "EN",
+      "cat": "gaming",
+      "url": "https://www.videogameschronicle.com/feed/"
+    },
+    {
+      "id": "gamingonlinux",
+      "name": "GamingOnLinux",
+      "lang": "EN",
+      "cat": "gaming",
+      "url": "https://www.gamingonlinux.com/article_rss.php"
+    },
+    {
+      "id": "gamekult",
+      "name": "Gamekult",
+      "lang": "FR",
+      "cat": "gaming",
+      "url": "https://www.gamekult.com/feed.xml"
+    },
+    {
+      "id": "jvcom",
+      "name": "Jeuxvideo.com",
+      "lang": "FR",
+      "cat": "gaming",
+      "url": "https://www.jeuxvideo.com/rss/rss-news.xml"
+    },
+    {
+      "id": "tomshardware",
+      "name": "Tom's Hardware",
+      "lang": "EN",
+      "cat": "auto",
+      "url": "https://www.tomshardware.com/feeds/all"
+    },
+    {
+      "id": "conversation",
+      "name": "The Conversation",
+      "lang": "FR",
+      "cat": "culture",
+      "url": "https://theconversation.com/fr/articles.atom"
+    },
+    {
+      "id": "lemonde-sciences",
+      "name": "Le Monde (sciences)",
+      "lang": "FR",
+      "cat": "culture",
+      "url": "https://www.lemonde.fr/sciences/rss_full.xml"
+    },
+    {
+      "id": "lemonde-international",
+      "name": "Le Monde (international)",
+      "lang": "FR",
+      "cat": "culture",
+      "url": "https://www.lemonde.fr/international/rss_full.xml"
+    },
+    {
+      "id": "courrier",
+      "name": "Courrier international",
+      "lang": "FR",
+      "cat": "culture",
+      "url": "https://www.courrierinternational.com/feed/all/rss.xml"
+    },
+    {
+      "id": "bbc-science",
+      "name": "BBC (science)",
+      "lang": "EN",
+      "cat": "culture",
+      "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"
+    },
+    {
+      "id": "aeon",
+      "name": "Aeon",
+      "lang": "EN",
+      "cat": "culture",
+      "url": "https://aeon.co/feed.rss"
+    }
+  ]
+}
