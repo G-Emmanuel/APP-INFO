@@ -483,7 +483,7 @@ def main() -> int:
                     continue
                 prev = previous.get(item["id"])
                 item["first_seen"] = prev["first_seen"] if prev else now.isoformat(timespec="seconds")
-                for k in ("summary_fr", "summary_fr_tries"):  # un article n'est résumé qu'une fois
+                for k in ("summary_fr", "summary_fr_v", "summary_fr_tries"):  # un article n'est résumé qu'une fois
                     if prev and k in prev:
                         item[k] = prev[k]
                 item["published"] = d.astimezone(timezone.utc).isoformat(timespec="seconds")
